@@ -2,14 +2,23 @@
     ViewBag.Title = "Home Page";
 }
 <link href="~/Content/mf.min.css" rel="stylesheet" />
-
+<link href="~/Content/font-awesome.min.css" rel="stylesheet" />
 <div ng-controller="HomeController">
-    <div class="jumbotron">
-        <h2>{{ greeting }}</h2>
-        <label for="search"></label><input id="search" type="text" value="" placeholder="search" />
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="row " id="resultspanel">3d goodness</div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="input-group">
+                <label for="search"></label>
+                <input type="text" class="form-control" id="search" value="" placeholder="search">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button"><span class="fa fa-search"> </span></button>
+                </span>
+            </div><!-- /input-group -->
+        </div><!-- /.col-lg-6 -->
+    </div><div class="row"><div class="btn-group btn-group-lg">...</div>
+<div class="btn-group">...</div>
+<div class="btn-group btn-group-sm">...</div>
+<div class="btn-group btn-group-xs">...</div></div>
+    <div class="row" id="resultspanel"></div>
 </div>
 <script src="~/Scripts/jquery-2.1.1.min.js"></script>
 <script src="~/Scripts/angular.min.js"></script>

@@ -18,7 +18,7 @@ myApp.controller('HomeController', ['$scope', function ($scope) {
             .attr("width", width)
             .attr("height", height);
 
-        d3.json("/Content/miserables.json", function (error, graph) {
+        d3.json(document.location.href+"/Content/miserables.json", function (error, graph) {
             var nodes = graph.nodes.slice(),
                 links = [],
                 bilinks = [];
@@ -46,7 +46,7 @@ myApp.controller('HomeController', ['$scope', function ($scope) {
                 .data(graph.nodes)
                 .enter().append("circle")
                 .attr("class", "node")
-                .attr("r", 5)
+                .attr("r", 50)
                 .style("fill", function(d) { return color(d.group); })
                 .call(force.drag);
 
