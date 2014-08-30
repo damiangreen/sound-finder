@@ -1,22 +1,68 @@
 ﻿var myApp = angular.module('soundFinderApp', []);
 
 myApp.controller('HomeController', ['$scope', function ($scope) {
+    $scope.effects = true;
+
+    //set up standard filters
+    $scope.setup = function(defs) {
+        var shadowFilter = defs.append('filter')
+            .attr('id', 'shadow')
+            .attr('x', '-20%')
+            .attr('y', '-20%')
+            .attr('width', '140%')
+            .attr('height', '140%');
+
+        shadowFilter.append("feGaussianBlur")
+            .attr("in", "SourceAlpha")
+            .attr("stdDeviation", '2 2')
+            .attr("result", "shadow");
+
+        shadowFilter.append("feOffset")
+            //.attr("in", "blur")
+            .attr("dx", 2)
+            .attr("dy", 2);
+    };
 
     $scope.drawChart = function () {
-
+     
         var width = 960,
             height = 500;
 
         var color = d3.scale.category20();
 
         var force = d3.layout.force()
-            .linkDistance(10)
+            .linkDistance(30)
             .linkStrength(2)
             .size([width, height]);
 
         var svg = d3.select("#resultspanel").append("svg")
             .attr("width", width)
             .attr("height", height);
+        var defs = svg.append("defs");
+        $scope.setup(defs);
+        // black drop shadow
+
+        //var filter = defs.append("filter")
+        //    .attr("id", "drop-shadow");
+
+        //filter.append("feGaussianBlur")
+        //    .attr("in", "SourceAlpha")
+        //    .attr("stdDeviation", .8)
+        //    .attr("result", "blur");
+
+        //filter.append("feFlood")
+        //    .attr("flood-color", "rgba(1,1,0,0.5)");
+
+        //filter.append("feMerge")
+        //   .append("feMergeNode")
+        //   .append("feMergeNode").attr("in", "SourceGraphic");
+
+        //filter.append("feOffset")
+        //    .attr("in", "blur")
+        //    .attr("dx", 2)
+        //    .attr("dy", 2)
+        //    .attr("result", "offsetBlur");
+
 
         d3.json(document.location.href + "/Content/miserables.json", function (error, graph) {
             var nodes = graph.nodes.slice(),
@@ -41,23 +87,34 @@ myApp.controller('HomeController', ['$scope', function ($scope) {
                 .data(bilinks)
                 .enter().append("path")
                 .attr("class", "link");
-            debugger;
+
             var bar = svg.selectAll(".node")
                       .data(graph.nodes)
                       .enter()
                       .append("g")
+                          .attr("class", "node-container")
                       .call(force.drag)
             ;
 
-            var node = bar.append("circle")
-                .attr("class", "node")
-                .attr("r", 15)
+            var node = bar.append("rect")
+                 .attr("rx", 3)
+                 .attr("ry", 3)
+                 .attr("class", "node")
+                 .attr("width", 65)
+                 .attr("height", 25)
+              //  .attr("r", 15)
                 .style("fill", function (d) { return color(d.group); })
             ;
 
             bar.append("text")
-                .attr("transform", function (d, i) { return "translate(-30,0)"; })
-               .text(function (d) { return d.name; });
+                .attr("transform", function (d, i) { return "translate(5,10)"; })
+                .text(function (d) { return d.name; })
+               .style("filter", "url(#shadow)")
+            ;
+            bar.append("text")
+                .attr("transform", function (d, i) { return "translate(5,10)"; })
+                .text(function (d) { return d.name; })
+            ;
 
             force.on("tick", function () {
                 link.attr("d", function (d) {

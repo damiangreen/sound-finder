@@ -1,18 +1,43 @@
-﻿.container {
-    #search {
-        width: 516px;
-    }
+﻿
+@color1: #B3EDFF;
+@color2: #B3C7FF;
+@color3: #C4B3FF;
+@color4: #EBB3FF;
 
-    #resultspanel {
-    border:dashed 2px;
-        .node {
-            stroke: #fff;
-            stroke-width: 1.5px;
+body {
+    background-color: white;
+
+    .container {
+
+        #search {
+            width: 516px;
         }
 
-        .link {
-            fill: none;
-            stroke: #bbb;
+        #resultspanel {
+            /*http://www.colorschemer.com/online.html*/
+            background-color: @color1;
+            border: solid 2px @color2;
+
+            .node-container {
+                cursor: pointer;
+
+                .node {
+                    stroke: #292929;
+                    stroke-width: 1.5px;
+                }
+
+                text {
+                    /*stroke: #fff;
+                stroke-width: 1.5px;*/
+                    fill: white;
+                    font-size: 7pt;
+                }
+            }
+
+            .link {
+                fill: none;
+                stroke: #bbb;
+            }
         }
     }
 }
