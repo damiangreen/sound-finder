@@ -23,6 +23,16 @@ myApp.controller('HomeController', ['$scope', function ($scope) {
             .attr("dy", 2);
     };
 
+    $scope.appendDropShadowText = function(bar) {
+        bar.append("text")
+            .attr("transform", function(d, i) { return "translate(5,10)"; })
+            .text(function(d) { return d.name; })
+            .style("filter", "url(#shadow)");
+        bar.append("text")
+            .attr("transform", function(d, i) { return "translate(5,10)"; })
+            .text(function(d) { return d.name; });
+    };
+
     $scope.drawChart = function () {
      
         var width = 960,
@@ -35,9 +45,10 @@ myApp.controller('HomeController', ['$scope', function ($scope) {
             .linkStrength(2)
             .size([width, height]);
 
-        var svg = d3.select("#resultspanel").append("svg")
-            .attr("width", width)
-            .attr("height", height);
+        var svg = d3.select("#resultspanel")
+                    .append("svg")
+                        .attr("width", width)
+                        .attr("height", height);
         var defs = svg.append("defs");
         $scope.setup(defs);
         // black drop shadow
@@ -102,19 +113,12 @@ myApp.controller('HomeController', ['$scope', function ($scope) {
                  .attr("class", "node")
                  .attr("width", 65)
                  .attr("height", 25)
-              //  .attr("r", 15)
-                .style("fill", function (d) { return color(d.group); })
+                .style("fill", function(d) {
+                     return color(d.group);
+                })
             ;
 
-            bar.append("text")
-                .attr("transform", function (d, i) { return "translate(5,10)"; })
-                .text(function (d) { return d.name; })
-               .style("filter", "url(#shadow)")
-            ;
-            bar.append("text")
-                .attr("transform", function (d, i) { return "translate(5,10)"; })
-                .text(function (d) { return d.name; })
-            ;
+            $scope.appendDropShadowText(bar);
 
             force.on("tick", function () {
                 link.attr("d", function (d) {
@@ -129,6 +133,7 @@ myApp.controller('HomeController', ['$scope', function ($scope) {
         });
     };
 
+    // constructor
     $scope.greeting = 'Hola!';
     $scope.drawChart();
 }]);
