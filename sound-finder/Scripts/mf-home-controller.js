@@ -1,8 +1,8 @@
 ﻿var myApp = angular.module('soundFinderApp', []);
 
 myApp.controller('HomeController', ['$scope', function ($scope) {
- 
-    $scope.drawChart = function() {
+
+    $scope.drawChart = function () {
 
         var width = 960,
             height = 500;
@@ -18,12 +18,12 @@ myApp.controller('HomeController', ['$scope', function ($scope) {
             .attr("width", width)
             .attr("height", height);
 
-        d3.json(document.location.href+"/Content/miserables.json", function (error, graph) {
+        d3.json(document.location.href + "/Content/miserables.json", function (error, graph) {
             var nodes = graph.nodes.slice(),
                 links = [],
                 bilinks = [];
 
-            graph.links.forEach(function(link) {
+            graph.links.forEach(function (link) {
                 var s = nodes[link.source],
                     t = nodes[link.target],
                     i = {}; // intermediate node
@@ -41,25 +41,31 @@ myApp.controller('HomeController', ['$scope', function ($scope) {
                 .data(bilinks)
                 .enter().append("path")
                 .attr("class", "link");
+            debugger;
+            var bar = svg.selectAll(".node")
+                      .data(graph.nodes)
+                      .enter()
+                      .append("g")
+                      .call(force.drag)
+            ;
 
-            var node = svg.selectAll(".node")
-                .data(graph.nodes)
-                .enter().append("circle")
+            var node = bar.append("circle")
                 .attr("class", "node")
-                .attr("r", 50)
-                .style("fill", function(d) { return color(d.group); })
-                .call(force.drag);
+                .attr("r", 15)
+                .style("fill", function (d) { return color(d.group); })
+            ;
 
-            node.append("title")
-                .text(function(d) { return d.name; });
+            bar.append("text")
+                .attr("transform", function (d, i) { return "translate(-30,0)"; })
+               .text(function (d) { return d.name; });
 
-            force.on("tick", function() {
-                link.attr("d", function(d) {
+            force.on("tick", function () {
+                link.attr("d", function (d) {
                     return "M" + d[0].x + "," + d[0].y
                         + "S" + d[1].x + "," + d[1].y
                         + " " + d[2].x + "," + d[2].y;
                 });
-                node.attr("transform", function(d) {
+                bar.attr("transform", function (d) {
                     return "translate(" + d.x + "," + d.y + ")";
                 });
             });
